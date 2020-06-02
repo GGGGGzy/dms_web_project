@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="org.dms.enums.DeviceType" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -6,7 +7,7 @@
 </head>
 <body>
 <form action="/device" method="post">
-    <input type="hidden" name="method" value="addDevice">
+    <input type="hidden" name="method" value="add">
     主设备编号: <input type="text" name="parent">
     <br>
     批次: <input type="date" name="batch">
@@ -22,7 +23,14 @@
         %>
     </select>
     <br>
-    设备品牌: <input type="text" name="brand">
+    设备品牌:
+    <select name="type">
+        <c:forEach var="brand" items="${requestScope.brand}">
+            <option value="${brand.name}">
+                ${brand.name}
+            </option>
+        </c:forEach>
+    </select>
     <br>
     设备名称: <input type="text" name="name">
     <br>

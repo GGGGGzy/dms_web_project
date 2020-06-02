@@ -1,13 +1,13 @@
 <%@ page import="org.dms.entity.Pagination" %>
 <%@ page import="org.dms.entity.Device" %>
-<%@ page import="org.dms.enums.DeviceType" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>设备管理</title>
 </head>
 <body>
-
+<% Pagination<Device> pagination = (Pagination<Device>) request.getAttribute("pagination");%>
 <table border="1">
     <thead>
     <tr>
@@ -20,41 +20,40 @@
     </tr>
     </thead>
     <tbody>
-    <%
-        Pagination<Device> pagination = (Pagination<Device>) request.getAttribute("pagination");
-        for (Device device : pagination.getData()) {
-    %>
-    <tr>
-        <td><a href="/device?method=detail&code=<%=  device.getCode() %>"><%= device.getCode() %></a>
-        </td>
-        <td><%= device.getBatch() %>
-        </td>
-        <td><%= DeviceType.getDeviceTypeByType(device.getType()).getTypeName() %>
-        </td>
-        <td><%= device.getBrand() %>
-        </td>
-        <td><%= device.getName() %>
-        </td>
-        <td><a href="/device?currentPage=<%= pagination.getCurrentPage() %>&pageSize=<%= pagination.getPageSize() %>&method=delete&code=<%= device.getCode() %>">删除</a>
-        </td>
-    </tr>
-    <%
-        }
-    %>
+    <c:set var="devices" value="${requestScope.pagination.data}" scope="page"/>
+    <c:forEach var="device" items="${pageScope.devices}">
+        <tr>
+            <td>
+                <a href="/device?method=detail&code=${pageScope.device.code}">${pageScope.device.code}</a>
+            </td>
+            <td>
+                    ${pageScope.device.batch}
+            </td>
+            <td>
+                    ${pageScope.device.type}
+            </td>
+            <td>
+                    ${pageScope.device.brand}
+            </td>
+            <td>
+                    ${pageScope.device.name}
+            </td>
+            <td>
+                <a href="/device?currentPage=${requestScope.pagination.currentPage}&pageSize=${requestScope.pagination.pageSize}&method=delete&code=${pageScope.device.code}">删除</a>
+            </td>
+        </tr>
+    </c:forEach>
     </tbody>
 </table>
 <a href="add/device.jsp">新增</a><br>
-共 <%= pagination.getTotalCount() %> 条记录, 每页显示
+共 ${requestScope.pagination.totalCount} 条记录, 每页显示
 <form action="/device" style="display: inline-block">
     <select name="pageSize">
-    <%
-        for (int i = 5; i <= 20; i += 5) {
-    %>
-        <option value="<%= i %>" <%= pagination.getPageSize() == i ? "selected" : "" %>><%= i %>
-        </option>
-    <%
-        }
-    %>
+        <c:forEach begin="5" end="20" step="5" varStatus="status">
+            <option value="${status.index}" <c:if test="${requestScope.pagination.pageSize == status.index}"> selected </c:if>>
+                ${status.index}
+            </option>
+        </c:forEach>
     </select>
     条记录
     <input type="submit" value="确定">

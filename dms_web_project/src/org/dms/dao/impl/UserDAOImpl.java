@@ -20,10 +20,8 @@ public class UserDAOImpl implements IUserDAO {
         try {
             rs = DBUtil.executeQuery(sql, params);
             if (rs.next()) {
-                user.setId(rs.getInt("id"));
-                user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password"));
-                user.setId(rs.getInt("auth"));
+                user = new User();
+                EntityUtil.setPropertiesByResultSet(user, rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -45,10 +43,8 @@ public class UserDAOImpl implements IUserDAO {
             rs = DBUtil.executeQuery(sql, params);
             if (rs.next()) {
                 user = new User();
-                user.setId(rs.getInt("id"));
-                user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password"));
-                user.setId(rs.getInt("auth"));
+                EntityUtil.setPropertiesByResultSet(user, rs);
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -70,10 +66,8 @@ public class UserDAOImpl implements IUserDAO {
             rs = DBUtil.executeQuery(sql, params);
             if (rs.next()) {
                 user = new User();
-                user.setId(rs.getInt("id"));
-                user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password"));
-                user.setId(rs.getInt("auth"));
+                EntityUtil.setPropertiesByResultSet(user, rs);
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -121,10 +115,7 @@ public class UserDAOImpl implements IUserDAO {
             rs = DBUtil.executeQuery(sql, params);
             while (rs.next()) {
                 User user = new User();
-                user.setId(rs.getInt("id"));
-                user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password"));
-                user.setId(rs.getInt("auth"));
+                EntityUtil.setPropertiesByResultSet(user, rs);
                 users.add(user);
             }
         } catch (SQLException e) {
